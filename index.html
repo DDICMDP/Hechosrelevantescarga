@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Hechos Relevantes PRO</title>
+  <link rel="stylesheet" href="styles.css"/>
+  <!-- docx for Word export -->
+  <script defer src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.min.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <h1>Hechos Relevantes</h1>
+    <nav>
+      <button id="tabForm" class="tab on">Carga</button>
+      <button id="tabCases" class="tab">Hechos guardados</button>
+      <button id="tabCatalog" class="tab">Catálogo</button>
+    </nav>
+  </div>
+  <img src="assets/LogoDDIC.png" class="logo" alt="Logo"/>
+</header>
+
+<main>
+  <div id="errorBox" class="error" hidden></div>
+
+  <!-- FORM TAB -->
+  <section id="formTab" class="tabpane on">
+    <div class="grid">
+      <div class="card">
+        <h2>1) Encabezado</h2>
+        <div class="row">
+          <label>Fecha</label>
+          <input id="g_fecha_dia" type="date"/>
+        </div>
+        <div class="row">
+          <label>Tipo</label>
+          <select id="g_tipoExp">
+            <option value="PU">PU</option>
+            <option value="IPP">IPP</option>
+            <option value="NUC">NUC</option>
+          </select>
+          <label>Número</label>
+          <input id="g_numExp" placeholder="270840"/>
+        </div>
+        <div class="row">
+          <label>Partido</label>
+          <select id="g_partido">
+            <option value="">— Elegir —</option>
+            <option>General Pueyrredon</option>
+            <option>Balcarce</option>
+            <option>Mar Chiquita</option>
+            <option>General Alvarado</option>
+          </select>
+          <label>Localidad</label>
+          <select id="g_localidad"></select>
+        </div>
+        <div class="row">
+          <label>Dependencia</label>
+          <select id="g_dep"></select>
+        </div>
+        <div id="g_dep_manual_wrap" class="row" style="display:none">
+          <label>Dependencia (manual)</label>
+          <input id="g_dep_manual" placeholder="Cría. Mar del Plata 6ta."/>
+        </div>
+        <div class="row">
+          <label>Carátula</label>
+          <input id="g_car" placeholder="Robo Agravado"/>
+        </div>
+        <div class="row">
+          <label>Subtítulo</label>
+          <input id="g_sub" placeholder="Entradera"/>
+          <label>Estado</label>
+          <select id="g_ok">
+            <option value="no">No esclarecido</option>
+            <option value="si">Esclarecido</option>
+          </select>
+        </div>
+        <div class="row">
+          <label>UFI</label>
+          <input id="g_ufi" placeholder="UFI N° ..."/>
+          <label>Coordenadas</label>
+          <input id="g_coord" placeholder="-38.0, -57.5"/>
+        </div>
+
+        <div class="preview">
+          <div id="tituloCompuesto"></div>
+          <div id="subCompuesto"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>2) Civiles</h2>
+        <div class="row wrap">
+          <input id="c_nombre" placeholder="Nombre"/>
+          <input id="c_apellido" placeholder="Apellido"/>
+          <input id="c_edad" placeholder="Edad" style="max-width:90px"/>
+          <input id="c_dni" placeholder="DNI" style="max-width:140px"/>
+          <input id="c_pais" placeholder="País de origen"/>
+          <input id="c_loc" placeholder="Localidad dom."/>
+          <input id="c_calle" placeholder="Calle dom."/>
+          <select id="c_vinculo">
+            <option>Victima</option>
+            <option>Imputado</option>
+            <option>Sindicado</option>
+            <option>Denunciante</option>
+            <option>Testigo</option>
+            <option>PP</option>
+            <option>Aprehendido</option>
+            <option>Detenido</option>
+            <option>Menor</option>
+            <option>NN</option>
+            <option>Damnificado institucional</option>
+          </select>
+          <select id="c_obito">
+            <option value="false">¿Óbito? No</option>
+            <option value="true">¿Óbito? Sí</option>
+          </select>
+          <button id="addCivil" class="btn">Agregar involucrado</button>
+        </div>
+        <div id="civilesList"></div>
+      </div>
+
+      <div class="card">
+        <h2>3) Personal de la Fuerza</h2>
+        <div class="row wrap">
+          <input id="f_nombre" placeholder="Nombre"/>
+          <input id="f_apellido" placeholder="Apellido"/>
+          <input id="f_edad" placeholder="Edad" style="max-width:90px"/>
+          <input id="f_legajo" placeholder="Legajo" style="max-width:140px"/>
+          <input id="f_fuerza" placeholder="Fuerza"/>
+          <input id="f_jerarquia" placeholder="Jerarquía"/>
+          <input id="f_destino" placeholder="Destino"/>
+          <input id="f_loc" placeholder="Localidad dom."/>
+          <input id="f_calle" placeholder="Calle dom."/>
+          <select id="f_vinculo">
+            <option>Imputado</option>
+            <option>Sindicado</option>
+            <option>Testigo</option>
+          </select>
+          <select id="f_obito">
+            <option value="false">¿Óbito? No</option>
+            <option value="true">¿Óbito? Sí</option>
+          </select>
+          <button id="addFuerza" class="btn">Agregar personal</button>
+        </div>
+        <div id="fuerzasList"></div>
+      </div>
+
+      <div class="card">
+        <h2>4) Objetos</h2>
+        <div class="row wrap">
+          <input id="o_desc" placeholder="Descripción del objeto (texto libre)"/>
+          <select id="o_vinc">
+            <option>Secuestro</option>
+            <option>Sustraccion</option>
+            <option>Hallazgo</option>
+            <option>Otro</option>
+          </select>
+          <button id="addObjeto" class="btn">Agregar objeto</button>
+        </div>
+        <div id="objetosList"></div>
+      </div>
+
+      <div class="card wide">
+        <h2>5) Resumen / Cuerpo</h2>
+        <textarea id="cuerpo" class="big" placeholder="Redactá el cuerpo. 
+Ej.:
+Fecha... entrevistan con #victima:0 ...
+sustrayendo #secuestro ...
+"></textarea>
+        <p class="muted">Estilos rápidos: <code>*negrita*</code>, <code>_itálica_</code> (en objetos), <code>!subrayado!</code>. Etiquetas: hacé click para insertar.</p>
+        <div id="tagHelper" class="chips"></div>
+      </div>
+
+      <div class="card wide actions">
+        <button id="generar" class="btn primary">Generar vista previa</button>
+        <label class="chk"><input type="checkbox" id="wa_merge"/> Párrafos pegados en WhatsApp</label>
+        <button id="copiarWA" class="btn">Copiar (WhatsApp)</button>
+        <button id="descargarWord" class="btn">Descargar Word</button>
+        <button id="exportCSV1" class="btn">Exportar CSV (actual)</button>
+        <button id="clearAll" class="btn ghost">Borrar formulario</button>
+      </div>
+
+      <div class="card wide">
+        <div id="previewHtml"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CASES TAB -->
+  <section id="casesTab" class="tabpane">
+    <div class="card wide">
+      <h2>Hechos guardados</h2>
+      <div class="row">
+        <input id="caseName" placeholder="Se autocompleta con Carátula + Fecha + (PU)"/>
+        <button id="saveCase" class="btn">Guardar como nuevo</button>
+        <button id="updateCase" class="btn">Actualizar seleccionado</button>
+        <button id="deleteCase" class="btn ghost">Borrar seleccionado</button>
+      </div>
+      <div class="row">
+        <input id="caseSearch" placeholder="Buscar (filtra al vuelo)"/>
+        <button id="loadSelected" class="btn">Cargar seleccionado</button>
+        <button id="downloadWordMulti" class="btn">Word (seleccionados)</button>
+        <button id="copyWAMulti" class="btn">Copiar WA (seleccionados)</button>
+        <button id="exportCSV" class="btn">Exportar CSV (seleccionados)</button>
+      </div>
+      <div id="casesList" class="table"></div>
+      <div class="row">
+        <input id="restoreFile" type="file" accept="application/json" hidden/>
+        <input id="mergeFile" type="file" accept="application/json" hidden/>
+        <button id="backupJSON" class="btn ghost">Backup JSON</button>
+        <button id="restoreJSON" class="btn ghost">Restaurar JSON</button>
+        <button id="mergeJSON" class="btn ghost">Fusionar JSON</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATALOG TAB -->
+  <section id="catalogTab" class="tabpane">
+    <div class="card wide">
+      <h2>Catálogo</h2>
+      <div class="row">
+        <label>Partido</label>
+        <select id="cat_partidoSel">
+          <option>General Pueyrredon</option>
+          <option>Balcarce</option>
+          <option>Mar Chiquita</option>
+          <option>General Alvarado</option>
+        </select>
+      </div>
+      <div class="grid2">
+        <div>
+          <label>Localidades (una por línea)</label>
+          <textarea id="cat_localidades"></textarea>
+        </div>
+        <div>
+          <label>Dependencias (una por línea)</label>
+          <textarea id="cat_dependencias"></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <button id="cat_guardar" class="btn">Guardar catálogo</button>
+        <button id="cat_reset" class="btn ghost">Restaurar ejemplo</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">Hechos Relevantes PRO — local first • sin servidores</footer>
+
+<script src="formats.js"></script>
+<script src="app.js"></script>
+<script>
+  // Tabs
+  const panes = {formTab: document.getElementById('formTab'),
+                 casesTab: document.getElementById('casesTab'),
+                 catalogTab: document.getElementById('catalogTab')};
+  const tabs = {tabForm: document.getElementById('tabForm'),
+                tabCases: document.getElementById('tabCases'),
+                tabCatalog: document.getElementById('tabCatalog')};
+  function showPane(key){
+    Object.values(panes).forEach(p=>p.classList.remove('on'));
+    Object.values(tabs).forEach(t=>t.classList.remove('on'));
+    panes[key].classList.add('on');
+    if(key==='formTab') tabs.tabForm.classList.add('on');
+    if(key==='casesTab') tabs.tabCases.classList.add('on');
+    if(key==='catalogTab') tabs.tabCatalog.classList.add('on');
+  }
+  tabs.tabForm.onclick = ()=>showPane('formTab');
+  tabs.tabCases.onclick = ()=>showPane('casesTab');
+  tabs.tabCatalog.onclick = ()=>showPane('catalogTab');
+</script>
+</body>
+</html>
